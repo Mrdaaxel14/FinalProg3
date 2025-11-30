@@ -1,44 +1,47 @@
+<?php
+// Obtener lista desde la API
+$productos = json_decode(file_get_contents("http://localhost/finalprog3/api.php"), true);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-<?php
-$cn = new mysqli("localhost", "root", "", "stocklite");
-$result = $cn->query("SELECT * FROM productos");
-?>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Productos</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+
     <h1>Listado de Productos</h1>
-    <a href="crear.php" class="btn-agregar">+ Agregar Producto</a>
-    <table border="1" cellpadding="5">
+
+    <a href="crear.php" class="btn-agregar">Agregar Producto</a>
+
+    <table>
         <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Categoría</th>
             <th>Precio</th>
             <th>Stock</th>
             <th>Acciones</th>
         </tr>
-        <?php while ($row = $result->fetch_assoc()) { ?>
+
+        <?php foreach ($productos as $p): ?>
             <tr>
-                <td><?= $row['id'] ?></td>
-                <td><?= $row['nombre'] ?></td>
-                <td><?= $row['descripcion'] ?></td>
-                <td><?= $row['categoria'] ?></td>
-                <td><?= $row['precio'] ?></td>
-                <td><?= $row['stock'] ?></td>
+                <td><?= $p["id"] ?></td>
+                <td><?= $p["nombre"] ?></td>
+                <td>$<?= $p["precio"] ?></td>
+                <td><?= $p["stock"] ?></td>
+
                 <td>
-                    <a href="editar.php?id=<?= $row['id'] ?>">Editar</a>
-                    <a href="eliminar.php?id=<?= $row['id'] ?>">Eliminar</a>
+                    <a href="editar.php?id=<?= $p["id"] ?>">Editar</a>
+                    <a href="eliminar.php?id=<?= $p["id"] ?>">Eliminar</a>
                 </td>
             </tr>
-        <?php } ?>
+        <?php endforeach; ?>
+
     </table>
 </body>
 
